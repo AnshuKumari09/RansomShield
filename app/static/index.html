@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RansomShield</title>
+<style>
+:root{
+  --bg:#e8edf1; --panel:#ffffff; --ink:#122029; --muted:#5b6b78; --line:#cfd8df;
+  --safe:#0e7d6f; --threat:#c92a35; --contained:#b86a00; --recovered:#2257c9;
+  --state:var(--safe); --state-soft:#dcf1ee;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0f1a21; --panel:#17252e; --ink:#e6eef3; --muted:#93a5b2; --line:#2a3b46; --state-soft:#10302c}
+}
+body[data-state="THREAT"]{--state:var(--threat);--state-soft:#fbe0e2}
+body[data-state="CONTAINED"]{--state:var(--contained);--state-soft:#faead2}
+body[data-state="RECOVERED"]{--state:var(--recovered);--state-soft:#dde7fb}
+@media (prefers-color-scheme:dark){
+  body[data-state="SAFE"]{--state-soft:#10302c}
+  body[data-state="THREAT"]{--state-soft:#3d1519}
+  body[data-state="CONTAINED"]{--state-soft:#3a2a0d}
+  body[data-state="RECOVERED"]{--state-soft:#14234a}
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 var(--sans);min-height:100vh}
+main{max-width:1180px;margin:0 auto;padding:20px 18px 40px}
+header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+h1{font-size:20px;margin:0;letter-spacing:.2px}
+header span{color:var(--muted);font-size:13px}
+
+.band{background:var(--state-soft);border-left:10px solid var(--state);border-radius:6px;padding:18px 22px;
+  display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.band h2{margin:0;font-size:clamp(28px,5vw,46px);line-height:1.05;color:var(--state);letter-spacing:.5px}
+.band p{margin:6px 0 0;color:var(--ink);max-width:56ch}
+.score{text-align:right;font-family:var(--mono)}
+.score b{display:block;font-size:40px;line-height:1;color:var(--state)}
+.score small{color:var(--muted)}
+body[data-state="THREAT"] .band h2{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.55}}
+@media (prefers-reduced-motion:reduce){body[data-state="THREAT"] .band h2{animation:none}}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;align-items:center}
+button{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--panel);color:var(--ink);
+  padding:10px 14px;border-radius:6px;cursor:pointer}
+button:hover:not(:disabled){border-color:var(--ink)}
+button:focus-visible{outline:3px solid var(--recovered);outline-offset:2px}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.actions .sp{flex:1}
+.actions a{text-decoration:none}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:2px 0 12px}
+.metrics div{border:1px solid var(--line);border-radius:6px;padding:8px}
+.metrics b{display:block;font:700 20px var(--mono);color:var(--state)}
+.metrics small{color:var(--muted);font-size:12px}
+label.chk{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:14px}
+
+.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:14px}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px;min-width:0}
+.card h3{margin:0 0 10px;font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:600;color:var(--muted);padding:4px 6px;border-bottom:1px solid var(--line)}
+td{padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.n{font-family:var(--mono);word-break:break-all}
+.bar{height:6px;background:var(--line);border-radius:3px;width:70px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--muted)}
+.bar i.hot{background:var(--threat)}
+.chip{font-size:12px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.chip.ok{background:#dcf1ee;color:#0b5d52}
+.chip.modified,.chip.unknown,.chip.missing{background:#fbe0e2;color:#9d1d27}
+.tag{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-left:6px}
+@media (prefers-color-scheme:dark){.chip.ok{background:#12403a;color:#8fe3d4}.chip.modified,.chip.unknown,.chip.missing{background:#4a1a1f;color:#ffb3b9}}
+svg{width:100%;height:auto;display:block}
+.alert ul{margin:6px 0 10px;padding-left:20px}
+.alert .meta{color:var(--muted);font-size:13px}
+.empty{color:var(--muted)}
+.feed{max-height:260px;overflow:auto;font-family:var(--mono);font-size:13px}
+.feed div{display:grid;grid-template-columns:70px 78px 1fr 40px;gap:8px;padding:3px 0;border-bottom:1px dashed var(--line)}
+.feed .k-moved,.feed .k-modified{color:var(--contained)}
+.feed .k-deleted{color:var(--threat)}
+.feed .hit{color:var(--threat);font-weight:700}
+#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);
+  padding:8px 14px;border-radius:6px;display:none}
+.foot{margin-top:16px;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body data-state="SAFE">
+<main>
+  <header><h1>RansomShield</h1><span id="snap">loading…</span></header>
+
+  <section class="band" aria-live="polite">
+    <div><h2 id="state">SAFE</h2><p id="sub">Connecting to the monitoring engine…</p></div>
+    <div class="score"><b id="score">0</b><small id="thr">threat score</small></div>
+  </section>
+
+  <div class="actions">
+    <button id="b-edit" class="primary">1. Edit a file normally</button>
+    <button id="b-bulk" class="primary">1b. Bulk copy 12 files</button>
+    <button id="b-attack" class="primary">2. Launch simulated attack</button>
+    <button id="b-recover" class="primary">3. Recover files</button>
+    <span class="sp"></span>
+    <label class="chk"><input type="checkbox" id="auto"> Recover automatically</label>
+    <a id="b-report" href="/api/report" download="incident_report.txt"><button type="button">Download report</button></a>
+    <button id="b-snap">Take snapshot</button>
+    <button id="b-reset">Reset demo</button>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <h3>Protected folder</h3>
+      <table><thead><tr><th>File</th><th>Size</th><th>Entropy</th><th>Integrity</th></tr></thead>
+      <tbody id="files"></tbody></table>
+    </section>
+    <div style="display:grid;gap:14px;align-content:start">
+      <section class="card">
+        <h3>Threat score, last 60 seconds</h3>
+        <svg id="chart" viewBox="0 0 600 170" role="img" aria-label="Threat score over time"></svg>
+      </section>
+      <section class="card alert" id="alert"><h3>Latest alert</h3><div class="empty">No alerts. Run the simulated attack to see one.</div></section>
+    </div>
+  </div>
+
+  <section class="card" style="margin-top:14px">
+    <h3>File activity</h3>
+    <div class="feed" id="feed"><span class="empty">Waiting for activity…</span></div>
+  </section>
+
+  <p class="foot">Demo scope: monitors one isolated folder and a harmless simulator. It is a prototype, not a production antivirus and it does not guarantee ransomware prevention.</p>
+</main>
+<div id="toast" role="status"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const STATES = {
+  SAFE:      ['SAFE', 'Normal activity. No suspicious behaviour detected.'],
+  THREAT:    ['THREAT DETECTED', 'Suspicious file behaviour found. Containing it now.'],
+  CONTAINED: ['THREAT CONTAINED', 'Process stopped and folder locked. Recover files from the last safe snapshot.'],
+  RECOVERED: ['FILES RECOVERED', 'Files verified against the last safe snapshot. Monitoring has resumed.'],
+};
+let busy = false;
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.style.display='block'; clearTimeout(toast.t); toast.t=setTimeout(()=>t.style.display='none',3000); }
+async function api(path, method='GET', body){
+  const r = await fetch(path, {method, headers:{'Content-Type':'application/json'}, body: body?JSON.stringify(body):undefined});
+  if(!r.ok){ const e = await r.json().catch(()=>({})); toast(e.detail || 'Request failed'); return null; }
+  return r.json();
+}
+document.addEventListener('click',()=>{ if('Notification' in window && Notification.permission==='default') Notification.requestPermission(); },{once:true});
+const time = ts => new Date(ts*1000).toLocaleTimeString([], {hour12:false});
+
+function renderChart(s){
+  const W=600,H=170,P=22;
+  const top=Math.max(s.threshold*1.6, Math.max(0,...s.history.map(h=>h[1]))+2);
+  const x=t=>P+((t-(s.now-60))/60)*(W-P-6), y=v=>H-P-(v/top)*(H-P-8);
+  const pts=s.history.filter(h=>h[0]>s.now-60).map(h=>`${x(h[0]).toFixed(1)},${y(h[1]).toFixed(1)}`);
+  const ty=y(s.threshold).toFixed(1);
+  $('#chart').innerHTML =
+    `<line x1="${P}" y1="${H-P}" x2="${W-6}" y2="${H-P}" stroke="currentColor" opacity=".25"/>`+
+    `<line x1="${P}" y1="${ty}" x2="${W-6}" y2="${ty}" stroke="#c92a35" stroke-dasharray="6 4"/>`+
+    `<text x="${P+4}" y="${ty-5}" font-size="12" fill="#c92a35">threat threshold (${s.threshold})</text>`+
+    (pts.length>1?`<polyline points="${pts.join(' ')}" fill="none" style="stroke:var(--state)" stroke-width="3" stroke-linejoin="round"/>`:'')+
+    `<text x="${P}" y="${H-5}" font-size="11" fill="currentColor" opacity=".6">60s ago</text>`+
+    `<text x="${W-40}" y="${H-5}" font-size="11" fill="currentColor" opacity=".6">now</text>`;
+}
+function renderFiles(files){
+  $('#files').innerHTML = files.map(f=>{
+    const lab = {ok:'Intact',modified:'Modified',unknown:'Unknown file',missing:'Missing'}[f.status];
+    return `<tr><td class="n">${esc(f.name)}${f.canary?'<span class="tag">decoy</span>':''}</td>
+      <td>${(f.size/1024).toFixed(1)} KB</td>
+      <td><div class="bar" title="${f.entropy} bits/byte"><i class="${f.entropy>7?'hot':''}" style="width:${Math.min(100,f.entropy/8*100)}%"></i></div></td>
+      <td><span class="chip ${f.status}">${lab}</span></td></tr>`;}).join('');
+}
+function renderAlert(alerts){
+  const el=$('#alert');
+  if(!alerts.length){ el.innerHTML='<h3>Latest alert</h3><div class="empty">No alerts. Run the simulated attack to see one.</div>'; return; }
+  const a=alerts[0], m=a.metrics||{};
+  el.innerHTML=`<h3>Latest alert</h3>
+   <div class="meta">${time(a.ts)} · score ${a.score} · ${esc(a.status)}</div>
+   <div class="metrics">
+     <div><b>${m.detection_seconds ?? '–'}s</b><small>detection time</small></div>
+     <div><b>${m.files_affected ?? '–'} of ${m.files_total ?? '–'}</b><small>files hit</small></div>
+     <div><b>${m.containment_seconds ?? '–'}s</b><small>to contain</small></div>
+     <div><b>${m.recovery_seconds ?? '–'}s</b><small>to recover</small></div>
+   </div>
+   <b>Why it fired</b><ul>${a.reasons.map(r=>`<li>${esc(r)}</li>`).join('')}</ul>
+   <b>What RansomShield did</b><ul>${a.actions.length?a.actions.map(r=>`<li>${esc(r)}</li>`).join(''):'<li>Working…</li>'}</ul>
+   <div class="meta">Files involved: ${a.files.map(esc).join(', ')}</div>`;
+}
+function renderFeed(evs){
+  $('#feed').innerHTML = evs.length ? evs.map(e=>`<div><span>${time(e.ts)}</span><span class="k-${e.kind}">${e.kind}</span>
+    <span class="${e.detail.includes('CANARY')?'hit':''}">${esc(e.path)} ${e.detail?'· '+esc(e.detail):''}</span><span>${e.score}</span></div>`).join('')
+    : '<span class="empty">Waiting for activity…</span>';
+}
+let prevState=null;
+function notify(s){
+  if(prevState && prevState!=='THREAT' && prevState!=='CONTAINED' && s.state==='THREAT'
+     && 'Notification' in window && Notification.permission==='granted'){
+    new Notification('RansomShield: threat detected', {body:'Suspicious file behaviour found. Containing it now.'});
+  }
+  prevState=s.state;
+}
+function renderStatus(s){
+  notify(s);
+  document.body.dataset.state=s.state;
+  const [t,sub]=STATES[s.state]; $('#state').textContent=t; $('#sub').textContent=sub;
+  $('#score').textContent=s.score; $('#thr').textContent=`threat score (alert at ${s.threshold})`;
+  $('#snap').textContent = s.snapshot ? `Last safe snapshot ${time(s.snapshot.ts)} · ${s.snapshot.files} files` : 'No snapshot yet';
+  const hot = s.state==='THREAT'||s.state==='CONTAINED';
+  $('#b-edit').disabled = busy||hot;
+  $('#b-bulk').disabled = busy||hot;
+  $('#b-attack').disabled = busy||hot||s.simulator_running;
+  $('#b-recover').disabled = busy||!(s.state==='CONTAINED');
+  $('#b-snap').disabled = busy||hot;
+  if(document.activeElement!==$('#auto')) $('#auto').checked=s.auto_recover;
+  renderChart(s);
+}
+async function refresh(){
+  try{
+    const [s,f,e,a]=await Promise.all([api('/api/status'),api('/api/files'),api('/api/events?limit=40'),api('/api/alerts')]);
+    if(s) renderStatus(s); if(f) renderFiles(f); if(e) renderFeed(e); if(a) renderAlert(a);
+  }catch(err){ $('#sub').textContent='Cannot reach the backend. Is run.py running?'; }
+}
+async function act(path, msg){ busy=true; const r=await api(path,'POST'); busy=false; if(r&&msg) toast(msg); refresh(); }
+$('#b-edit').onclick   = ()=>act('/api/demo/normal-edit','project.py edited');
+$('#b-bulk').onclick   = ()=>act('/api/demo/bulk-copy','12 files copied');
+$('#b-attack').onclick = ()=>act('/api/demo/attack','Simulated attack started');
+$('#b-recover').onclick= ()=>act('/api/recover','Recovery complete');
+$('#b-snap').onclick   = ()=>act('/api/snapshot','Snapshot saved');
+$('#b-reset').onclick  = ()=>act('/api/demo/reset','Demo reset');
+$('#auto').onchange    = e=>api('/api/config','POST',{auto_recover:e.target.checked});
+refresh(); setInterval(refresh, 800);
+</script>
+</body>
+</html>

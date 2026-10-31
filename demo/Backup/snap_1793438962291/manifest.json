@@ -1,0 +1,107 @@
+{
+  "id": "snap_1793438962291",
+  "label": "auto",
+  "ts": 1793438962.5593176,
+  "files": {
+    "copied_145915_0.txt": {
+      "sha256": "c0a60e447c6e40c1c83229f8ed2cdbd64f41ae25885b919ef34802b9d3ca53e4",
+      "size": 3800,
+      "entropy": 3.8268748818646365
+    },
+    "copied_145915_1.txt": {
+      "sha256": "df4931921b8105daf80c7cfdc25e7b39548571ed9495e217da92dd698c927c03",
+      "size": 3800,
+      "entropy": 3.8268748818646365
+    },
+    "copied_145915_2.txt": {
+      "sha256": "0bfa594f8732512546867339f52aef7a83fc9a0ac0ce3a227dec07609bc35d57",
+      "size": 3800,
+      "entropy": 3.8268748818646365
+    },
+    "copied_145915_3.txt": {
+      "sha256": "9904660ddb167ec2d512613f566d887fb73278e85d4dfc4423fa6bad88c5829b",
+      "size": 3800,
+      "entropy": 3.8268748818646365
+    },
+    "copied_145915_4.txt": {
+      "sha256": "e6d5bf733928ac05067edeb7543b0e19954ce07231e72545a9433fe359e9fd95",
+      "size": 3800,
+      "entropy": 3.8268748818646365
+    },
+    "copied_145915_5.txt": {
+      "sha256": "da3c8a2d745ea2ef9c3410b039026df6b59bff25e0a9865cbd81a66041c2298d",
+      "size": 3800,
+      "entropy": 3.8268748818646365
+    },
+    "copied_145915_6.txt": {
+      "sha256": "1e2c444bd9cc438ddf07a8784b1a129a89b821434d7469f4f5c22a043a0caac9",
+      "size": 3800,
+      "entropy": 3.8268748818646365
+    },
+    "copied_145915_7.txt": {
+      "sha256": "62b0e8d2e8331b053bcc723f64dbd28206eac11559cf279395d57257b44fe2bf",
+      "size": 3800,
+      "entropy": 3.8268748818646365
+    },
+    "data.csv": {
+      "sha256": "925317e50a490d9bebbfa048c6cb98bb36a8a20f9e5058679d75ea3ee03501f7",
+      "size": 3574,
+      "entropy": 4.111494534420183
+    },
+    "image.jpg": {
+      "sha256": "0fa363c4eff590370c9a0992b1a57e5be5e827f91e98ea68677629808a8b526c",
+      "size": 6004,
+      "entropy": 6.002342799907399
+    },
+    "notes.txt": {
+      "sha256": "24315e6b5ea09e0065079e80fdf2f61fea6b70c1c574963e04e1b3c4fbc28ad5",
+      "size": 2830,
+      "entropy": 4.168564453112005
+    },
+    "passwords_backup.txt": {
+      "sha256": "91e1e6493b66a61770ea70844c24460d429b1615f2dbdbdf505454523f22ceaa",
+      "size": 2134,
+      "entropy": 4.363471421131249
+    },
+    "photo_145915_0.jpg": {
+      "sha256": "b7e472e7fbf87eb9601d1e6c3839c75aa2fac97e120a91d3acf9309459db7efb",
+      "size": 4100,
+      "entropy": 7.9534885767648
+    },
+    "photo_145915_1.jpg": {
+      "sha256": "57bc9a44d5bb2c8d8be420008760991ac60dbf1745b9e22a6319e4a8e3b596f1",
+      "size": 4100,
+      "entropy": 7.952516035282746
+    },
+    "photo_145915_2.jpg": {
+      "sha256": "e7fc412db8d83f15876bd758b9c3c1c457f3cd79e1d1aeb43f0c74d4cb4b6f0f",
+      "size": 4100,
+      "entropy": 7.95418984850927
+    },
+    "photo_145915_3.jpg": {
+      "sha256": "c195d995f87ab5c59a674f4dc329d6a4b52ac4868988be08ddddd9b0a8ceeb60",
+      "size": 4100,
+      "entropy": 7.95921934267724
+    },
+    "project.py": {
+      "sha256": "d05a8997427f51ca1180ea0b6f4e17aa1b29aba60a70c61faa8f3da9d38e2257",
+      "size": 4290,
+      "entropy": 4.1608934232353825
+    },
+    "Q4_Financials.xlsx": {
+      "sha256": "40100f590e4afc09fe9b8d29dbcd36070fe15dedcce28c96c72b912314b5e225",
+      "size": 2131,
+      "entropy": 4.348582459817048
+    },
+    "report.pdf": {
+      "sha256": "4dc30e2e0ae1aaeb7657da996048b5cef9077ab89bdd0d4b525f5ef043999190",
+      "size": 4669,
+      "entropy": 4.342553209823488
+    },
+    "tax_records_2025.docx": {
+      "sha256": "40ff55d90f3d31ea6950ee7ac023c735ee89d7b3e2fa769f6049ee07e4e098bb",
+      "size": 2129,
+      "entropy": 4.344611524694918
+    }
+  }
+}

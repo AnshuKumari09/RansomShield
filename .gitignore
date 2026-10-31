@@ -1,0 +1,27 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# RansomShield runtime data (har run pe auto-generate hota hai)
+demo/
+*.db
+
+# Demo victim folders (agar project ke andar banaye)
+demo_victim_a/
+demo_victim_b/
+
+# Secrets (Telegram/Slack token jab add karenge)
+.env
+*.env
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

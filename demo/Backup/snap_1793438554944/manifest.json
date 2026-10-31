@@ -1,0 +1,47 @@
+{
+  "id": "snap_1793438554944",
+  "label": "reset",
+  "ts": 1793438555.0505493,
+  "files": {
+    "data.csv": {
+      "sha256": "925317e50a490d9bebbfa048c6cb98bb36a8a20f9e5058679d75ea3ee03501f7",
+      "size": 3574,
+      "entropy": 4.111494534420183
+    },
+    "image.jpg": {
+      "sha256": "0fa363c4eff590370c9a0992b1a57e5be5e827f91e98ea68677629808a8b526c",
+      "size": 6004,
+      "entropy": 6.002342799907399
+    },
+    "notes.txt": {
+      "sha256": "24315e6b5ea09e0065079e80fdf2f61fea6b70c1c574963e04e1b3c4fbc28ad5",
+      "size": 2830,
+      "entropy": 4.168564453112005
+    },
+    "passwords_backup.txt": {
+      "sha256": "91e1e6493b66a61770ea70844c24460d429b1615f2dbdbdf505454523f22ceaa",
+      "size": 2134,
+      "entropy": 4.363471421131249
+    },
+    "project.py": {
+      "sha256": "d05a8997427f51ca1180ea0b6f4e17aa1b29aba60a70c61faa8f3da9d38e2257",
+      "size": 4290,
+      "entropy": 4.1608934232353825
+    },
+    "Q4_Financials.xlsx": {
+      "sha256": "40100f590e4afc09fe9b8d29dbcd36070fe15dedcce28c96c72b912314b5e225",
+      "size": 2131,
+      "entropy": 4.348582459817048
+    },
+    "report.pdf": {
+      "sha256": "4dc30e2e0ae1aaeb7657da996048b5cef9077ab89bdd0d4b525f5ef043999190",
+      "size": 4669,
+      "entropy": 4.342553209823488
+    },
+    "tax_records_2025.docx": {
+      "sha256": "40ff55d90f3d31ea6950ee7ac023c735ee89d7b3e2fa769f6049ee07e4e098bb",
+      "size": 2129,
+      "entropy": 4.344611524694918
+    }
+  }
+}
